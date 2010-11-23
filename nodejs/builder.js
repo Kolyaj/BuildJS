@@ -75,6 +75,16 @@ function loadFile(fname, callback) {
                 requireFnBody += '}';
                 generateBody += '}';
 
+            } else if (line.match(/^\s*\/\/#if\s+(not\s+)?([a-zA-Z_$][a-zA-Z_$0-9]*)\s*$/)) {
+                var operand = RegExp.$1 ? '!' : '';
+                generateBody += 'if (' + operand + 'context.' + RegExp.$2 + ') {';
+
+            } else if (line.match(/^\s*\/\/#endif\s*$/)) {
+                generateBody += '}';
+
+            } else if (line.match(/^\s*\/\/#(un)?set\s+([a-zA-Z_$][a-zA-Z_$0-9]*)\s*$/)) {
+                generateBody += 'context.' + RegExp.$2 + ' = ' + (RegExp.$1 ? 'false' : 'true') + ';';
+
             } else if (line.match(/^\s*\/\/#include\s+([-_a-zA-Z0-9.:/]+)\s*$/)) {
                 var includeValues = RegExp.$1.split('::');
                 var includeFname = includeValues.shift();
