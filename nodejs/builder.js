@@ -123,7 +123,6 @@ function loadFile(fname, callback) {
                     resolvePaths();
                 })
             } else {
-//                require('sys').puts(generateBody + '\n\n');
                 callback(null, {
                     requires: requires,
                     requireFn: new Function('labels, files, requireList', requireFnBody),

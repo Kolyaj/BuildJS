@@ -1,5 +1,4 @@
-var fs = require('fs'),
-    sys = require('sys'),
+var sys = require('sys'),
     builder = require('./builder.js');
 
 if (process.argv.length < 3) {
