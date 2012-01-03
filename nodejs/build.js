@@ -1,8 +1,7 @@
-var sys = require('sys'),
-    builder = require('./builder.js');
+var builder = require('./builder.js');
 
 if (process.argv.length < 3) {
-    sys.puts('Usage: node build.js fname.js');
+    console.log('Usage: node build.js fname.js');
 }
 
 var context = {};
@@ -17,5 +16,5 @@ builder.build(process.argv[2], context, function(err, output) {
         throw err;
     }
 
-    sys.puts(output);
+    require('util').puts(output);
 });

@@ -1,8 +1,26 @@
 var fs = require('fs'),
     path = require('path');
 
+var realpathCache = {};
+
+function realpath(fname, callback) {
+    if (realpathCache[fname]) {
+        callback(null, realpathCache[fname]);
+    } else {
+        fs.realpath(fname, function(err, absFname) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            absFname = absFname.replace(/\\/g, '/');
+            realpathCache[fname] = absFname;
+            callback(null, absFname);
+        });
+    }
+}
+
 exports.build = function(fname, context, callback) {
-    fs.realpath(fname, function(err, absFname) {
+    realpath(fname, function(err, absFname) {
         if (err) {
             callback(err);
             return;
@@ -111,7 +129,7 @@ function loadFile(fname, callback) {
         (function resolvePaths() {
             if (i < requires.length) {
                 var relativePath = requires[i];
-                fs.realpath(path.join(path.dirname(fname), relativePath), function(err, absolutePath) {
+                realpath(path.join(path.dirname(fname), relativePath), function(err, absolutePath) {
                     if (err) {
                         callback(err);
                         return;
